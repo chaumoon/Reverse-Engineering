@@ -60,3 +60,18 @@ các chg trình nn assembly đc dịch hoàn toàn thành nn máy trc khi thực
 *. Binary Subtraction:<br>
 - trừ bthg<br>
 4. Boolean Expressions:<br>
+- đại số bool: chỉ có true or false
+- các toán tử:<br>
+. NOT: được ký hiệu là ¬ hoặc ~ hoặc '<br>
+. AND: được ký hiệu là ∧ hoặc •<br>
+. OR: được ký hiệu là ∨ hoặc |<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/947dccea-0995-4c83-89fa-0c5e3974ce4b)<br>
+
+- quy tắc ưu tiên:<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/985ac4d0-f601-487c-b46e-9a8387e80244)<br>
+
+*. Truth Tables for Boolean Functions <bảng chân trị> <br>
+- viết như trong kts ấy<br>
+
