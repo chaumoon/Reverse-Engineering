@@ -152,3 +152,19 @@ II. 32-Bit x86 Processors<br>
 . Auxiliary Carry flag (AC):  thiết lập khi một phép toán số học gây ra việc nhớ từ bit 3 sang bit 4 trong một toán hạng 8-bit<br>
 . Parity flag (PF): thiết lập nếu byte có độ trọng nhỏ nhất trong kết quả chứa một số chẵn các bit 1. Ngược lại, nếu không chứa số bit 1 chẵn, PF sẽ được xóa, thg đc use để check lỗi<br>
   
+*. MMX Registers <đăng kí MMX><br>
+- cải thiện hiệu suất của bộ xử lý Intel khi thực hiện các ứng dụng đa phương tiện và truyền thông tiên tiến
+- Tám đăng ký MMX 64-bit hỗ trợ các lệnh đặc biệt được gọi là SIMD (Single-Instruction, Multiple-Data - Một Lệnh, Nhiều Dữ Liệu)
+- hoạt động song song trên các giá trị dữ liệu chứa trong các đăng ký MMX
+- tên của các đăng ký MMX thực tế là các bí danh của các đăng ký giống nhau được sử dụng bởi đơn vị dấu chấm động<br>
+
+*. XMM Registers<br>
+- 8 đăng ký 128-bit gọi là đăng ký XMM, được sử dụng bởi các tiện ích mở rộng SIMD dành cho bộ chỉ thị
+- Floating-Point Unit (FPU): <br>
+. thực hiện phép tính dấu chấm động tốc độ cao<br>
+. FPU đã được tích hợp vào chip bộ xử lý chính<br>
+. Có tám đăng ký dữ liệu dấu chấm động trong FPU, được đặt tên là ST(0), ST(1), ST(2), ST(3), ST(4), ST(5), ST(6) và ST(7)<br>
+  
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/2d8accda-dacb-4116-aec2-2f7fd87de42a)<br>
+  
+3. 
