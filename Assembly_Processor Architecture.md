@@ -95,6 +95,60 @@ II. 32-Bit x86 Processors<br>
 - cung cấp cho hệ điều hành một cơ chế để triển khai các chức năng: quản lý năng lượng và bảo mật hệ thống
 - đc triển khai bằng cách tùy chỉnh bộ xử lý cho một cấu hình hệ thống cụ thể
 
-2. Basic Execution Environment<br>
-- 
+2. Basic Execution Environment <mt thực thi cơ bản><br>
+*. Address Space<br>
+- một tác vụ hoặc chương trình có thể truy cập không gian địa chỉ tuyến tính lên đến 4 GBytes
+- vi xử lý P6, một kỹ thuật gọi là địa chỉ vật lý mở rộng cho phép địa chỉ tới tổng cộng 64 GBytes bộ nhớ vật lý
+- chương trình ở chế độ địa chỉ thực chỉ có thể truy cập vào một phạm vi 1 MByte
+- Nếu bộ xử lý đang ở chế độ bảo vệ và chạy nhiều chương trình trong chế độ ảo-8086, mỗi chương trình có khu vực bộ nhớ riêng của riêng nó với dung lượng 1 MByte
 
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/b3b3c73b-66ff-4720-8aff-7e0f5410060d)<br>
+
+*. Basic Program Execution Registers <thanh ghi thực thi chg trình cơ bản><br>
+- Thanh ghi là các vị trí lưu trữ tốc độ cao ngay bên trong CPU, được thiết kế để truy cập với tốc độ cao hơn so với bộ nhớ thông thường
+- Có 8 thanh ghi dùng chung, 6 thanh ghi đoạn (segment registers), 1 thanh ghi cờ trạng thái của bộ xử lý (EFLAGS), 1 con trỏ chỉ thị (EIP).
+- General-Purpose Registers <thanh ghi use chung>:<br>
+. xài cho phép tính toán và di chuyển dữ liệu<br>
+. VD: 16 bit thấp của thanh ghi EAX có thể được truy cập bằng tên gọi AX<br>
+  
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/b3651173-8850-4958-9929-367ca1afad7f)<br>
+  
+. Một phần của một số thanh ghi có thể được truy cập như các giá trị 8 bit<br>
+. tg tự vs EAX, EBX, ECX và EDX<br>
+  
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/714c1418-5d0b-4b95-a390-2caeecb7bfd6)<br>
+
+. các thanh ghi còn lại chỉ can truy cập bằng cách sử dụng tên 32 bit hoặc 16 bit<br>
+  
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/303dc463-ae9a-499d-b16d-772c559cad59)<br>
+  
+- Specialized Uses <br>
+. EAX: tự động được sử dụng bởi các lệnh nhân và chia, gla thanh ghi tích lũy mở rộng<br>
+. CPU: tự động sử dụng ECX làm bộ đếm vòng lặp<br>
+. ESP: sử dụng để địa chỉ dữ liệu trên ngăn xếp (một cấu trúc bộ nhớ hệ thống), ít được sử dụng cho các phép tính thông thường hoặc chuyển dữ liệu, gla thanh ghi trỏ ngăn xếp mở rộng<br>
+. ESI và EDI: được sử dụng bởi các lệnh truyền dữ liệu tốc độ cao, gọi là thanh ghi chỉ số nguồn mở rộng và thanh ghi chỉ số đích mở rộng<br>
+. EBP: được xài bởi ngôn ngữ cấp cao để tham chiếu các tham số hàm và biến cục bộ trên ngăn xếp, Không nên sử dụng cho các phép tính thông thường hoặc chuyển dữ liệu trừ khi ở mức độ lập trình nâng cao, gọi là thanh ghi trỏ khung mở rộng.<br>
+  
+- Segment Registers <thanh ghi đoạn><br>
+. trong real-address mode: 16 bit chỉ định địa chỉ cơ sở của các khu vực bộ nhớ được chỉ định trước có tên gọi là đoạn (segments)<br>
+. protected mode: các thanh ghi đoạn giữ các con trỏ tới bảng mô tả đoạn (segment descriptor tables)<br>
+. Một số đoạn chứa các chỉ thị chương trình (code), những đoạn khác chứa biến (data), và một đoạn khác được gọi là đoạn ngăn xếp (stack segment) chứa biến cục bộ của hàm và các tham số của hàm<br>
+  
+- Instruction Pointer (EIP): thanh ghi chỉ thị, chứa địa chỉ của chỉ thị tiếp theo sẽ được thực thi, Một số chỉ thị máy tính cập nhật giá trị của EIP, dẫn đến chương trình nhảy tới vị trí mới
+  
+- EFLAGS Register: EFLAGS (just Flags) là một thanh ghi chứa các bit nhị phân riêng lẻ, điều khiển hoạt động của CPU hoặc phản ánh kết quả của một số hoạt động của CPU. Một số chỉ thị kiểm tra và điều khiển từng cờ xử lý riêng lẻ.
+  
+-> cờ đc đặt khi nó = 1, xóa khi nó = 0<br>
+  
+- Control Flags<br>
+. điều khiển hoạt động của CPU<br>
+. Các chương trình có thể đặt các bit riêng lẻ trong thanh ghi EFLAGS để điều khiển hoạt động của CPU<br>
+  
+- Status Flags<br>: phản ánh kết quả của các phép toán số học và logic được thực hiện bởi CPU<br>
+. Carry flag (CF): thiết lập khi kết quả của một phép toán số học không dấu quá lớn để chứa vào đích<br>
+. Overflow flag (OF): thiết lập khi kết quả của một phép toán số học có dấu quá lớn hoặc quá nhỏ để chứa vào đích<br>
+. Sign flag (SF): thiết lập khi kết quả của một phép toán số học hoặc logic tạo ra một kết quả âm<br>
+. Zero flag (ZF):  thiết lập khi kết quả của một phép toán số học hoặc logic tạo ra kết quả = 0<br>
+. Auxiliary Carry flag (AC):  thiết lập khi một phép toán số học gây ra việc nhớ từ bit 3 sang bit 4 trong một toán hạng 8-bit<br>
+. Parity flag (PF): thiết lập nếu byte có độ trọng nhỏ nhất trong kết quả chứa một số chẵn các bit 1. Ngược lại, nếu không chứa số bit 1 chẵn, PF sẽ được xóa, thg đc use để check lỗi<br>
+  
