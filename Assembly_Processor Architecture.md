@@ -228,4 +228,54 @@ III. 64-Bit x86-64 Processors<br>
 . thanh ghi EFLAGS 32 bit đc thay bởi thanh ghi RFLAGS 64 bit ở chế độ 64 bit, chúng share 32 bit thấp như nhau và 32 bit cao of RFLAGS ko đc xài<br>
 . Các cờ trạng thái là giống nhau ở cả chế độ 32 bit và 64 bit.<br>
   
+IV. Components of a Typical x86 Computer <thành phần of 1 máy tính x86><br>
+1. Motherboard <bo mạch chủ><br>
+- Trái tim của một máy tính nhỏ gọn là bo mạch chủ, một tấm mạch phẳng được đặt trên đó có CPU, các bộ xử lý hỗ trợ (chipset), bộ nhớ chính, các kết nối đầu vào/ra, kết nối nguồn và khe mở rộng
+- các thành phần khác nhau kết nối vs nhau qua 1 bus, 1 tập hợp dây đc etc trực tiếp trên bo mạch chủ
+- các thành phần trên bo mạch chủ PC:<br>
+  . Một ổ cắm CPU: hình dạng và kích thc khác nhau, tùy thuộc bộ vi xử lí mà chúng hỗ trợ<br>
+  . Khe cắm bộ nhớ (SIMM hoặc DIMM): giữ các bo mạch nhớ cắm nhỏ<br>
+  . Chip máy tính BIOS (hệ thống đầu vào/đầu ra cơ bản): chứa phần mềm hệ thống<br>
+  . RAM CMOS + 1 viên pin tròn nhỏ: suy trì nguồn điện cho nó<br>
+  . Các cổng kết nối cho các thiết bị lưu trữ đại trà như ổ cứng và CD-ROM<br>
+  . Các cổng USB cho các thiết bị ngoại vi bên ngoài<br>
+  . Các cổng bàn phím và chuột<br>
+  . Các kết nối bus PCI cho các thẻ âm thanh, thẻ đồ họa, các bo mạch thu thập dữ liệu và các thiết bị vào/ra khác<br>
+- các thành phần tùy chọn:<br>
+  . Bộ xử lý âm thanh tích hợp<br>
+  . Các cổng kết nối thiết bị song song và nối tiếp<br>
+  . Bộ điều hợp mạng tích hợp<br>
+  . Kết nối bus AGP cho một thẻ video tốc độ cao<br>
+- một số bộ xử lí hỗ trợ quan trọng:<br>
+  . Đơn vị số học động (FPU): xử lí phép tính dấu chấm động và số ng mở rộng<br>
+  . Bộ tạo xung 8284/82C284 (bộ tạo xung): dao động vs tốc độ ko đổi, đồng bộ hóa CPU và phần còn lại of máy tính<br>
+  . Bộ điều khiển ngắt (PIC): can lập trình 8259A xử lý các ngắt từ các thiết bị phần cứng bên ngoài, như bàn phím, đồng hồ hệ thống và ổ đĩa, chúng ngắt CPU và buộc nó xử lí yêu cầu ngay lập tức<br>
+  . Bộ định thời/tính giờ: can lập trình 8253 ngắt hệ thống 18,2 lần mỗi giây, cập nhật ngày và giờ hệ thống và điều khiển loa, liên tục làm mới bộ nhớ vì chip bộ nhớ RAM chỉ có thể nhớ dữ liệu trong vài mili giây<br>
+  . Cổng song song: lập trình 8255 chuyển dữ liệu vào và ra máy tính bằng giao diện cổng song song IEEE, sử dụng cho máy in, nhưng cũng có thể sử dụng với các thiết bị vào/ra khác<br>
+  
+*. PCI and PCI Express Bus Architectures <kiến trúc Bus PCI và PCI Express><br>
+  - bus PCI cung cấp cầu nối kết nói CPU vs thiết bị hệ thống khác: ổ cứng, bộ nhớ, điều khiển video, thẻ âm thanh và điều khiển mạng<br>
+  - bus PCI Express cung cấp kết nối hai chiều dạng chuỗi giữa các thiết bị, bộ nhớ và bộ xử lý, truyền dữ liệu theo gói, tương tự như mạng, trong các "lane" riêng biệt, được hỗ trợ rộng rãi bởi các bộ điều khiển đồ họa và có thể truyền dữ liệu với tốc độ rất cao<br>
+ 
+*. Motherboard Chipset <bộ xử lí bo mạch chủ><br>
+  - là bộ sưu tập các chip xử lí đc thiết kế để hoạt động cùng nhau trên 1 bo mạch cụ thể <br>
+  - Chipset Intel P965 Express có thể được sử dụng làm ví dụ. Nó được sử dụng trong các máy tính để bàn, với bộ vi xử lý Intel Core 2 Duo hoặc Pentium D<br>
+  - các tính năng của có:<br>
+  . Intel Fast Memory Access sử dụng một Memory Controller Hub (MCH): đc cập nhật, can truy cập vào bộ nhớ DDR2 dual-channel với tốc độ đồng hồ 800 MHz<br>
+  . Một I/O Controller Hub (Intel ICH8/R/DH): xài công nghệ Intel Matrix Storage (MST) để hỗ trợ nh thiết bị Serial ATA (ổ đĩa cứng)<br>
+  . Hỗ trợ nhiều cổng USB, nhiều khe cắm PCI express, mạng và công nghệ Intel Quiet System<br>
+  . Chip âm thanh định nghĩa cao cung cấp khả năng âm thanh số<br>
+
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/1d589b39-f8d1-4f1d-a34e-dcaf37bedc44)<br>
+  
+2. Memory<br>
+  - các loại bộ nhớ cơ bản:<br>
+  . ROM: chỉ đọc, đc ghi vĩnh viễn vào 1 chip và ko thể xóa<br>
+  . EPROM: chỉ đọc can xóa chậm = ánh sáng tử ngoại và can lập trình lại<br>
+  . DRAM: bộ nhớ truy cập ngẫu nhiên động, là bộ nhớ chính, ns chg trình và dữ liệu đc lưu khi chg trình đang chạy, phải được làm mới mỗi mili giây để tránh mất nội dung. Một số hệ thống sử dụng bộ nhớ ECC (error checking and correcting - kiểm tra và sửa lỗi).<br>
+  . SRAM: bộ nhớ tĩnh, xài cho bộ nhớ cache tốc độ cao, đắt tiền, ko cần làm ms<br>
+  . VRAM: bộ nhớ vid, 2 cổng cho phép 1 cổng lm ms liên tục màn hình khi cổng khác ghi dữ liệu lên màn hình<br>
+  . CMOS RAM: lưu trữ in4 cấu hình hệ thống, lm ms = pin -> nội dung đc lưu khi máy tắt nguồn<br>
+  
+                                                                                                  
 
