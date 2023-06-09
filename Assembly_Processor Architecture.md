@@ -65,4 +65,13 @@ bus địa chỉ: chứa địa chỉ of hg dẫn và dữ liệu khi chúng th�
 -> chúng hoạt động cùng nhau theo 1 cách tối ưu<br>
 - cache nhanh vì nó xây dựng từ chip bộ nhớ (RAm tĩnh)
 
-4. 
+4. Loading and Executing a Program<br>
+- quá trình tải và thực thi chg trình:
+. B1: Hệ điều hành (OS) tìm kiếm tên tệp chương trình trong thư mục đĩa hiện tại <ko thấy -> tìm kiếm trong danh sách thư mục đã định trước (gọi là đường dẫn) cho tên tệp>, ko thấy -> hiện thông báo lỗi<br>
+. B2: lấy thông tin cơ bản về tệp chương trình từ thư mục đĩa: kích thước tệp và vị trí vật lý trên ổ đĩa<br>
+. B3: xác định vị trí bộ nhớ tiếp theo có sẵn và tải tệp chương trình vào bộ nhớ, cấp phát một khối bộ nhớ cho chương trình và nhập thông tin về kích thước và vị trí của chương trình vào một bảng (thường được gọi là bảng miêu tả), có thể điều chỉnh giá trị của các con trỏ trong chương trình để chứa địa chỉ của dữ liệu chương trình<br>
+. B4: thực thi lệnh máy đầu tiên của chương trình (điểm vào), gán một số định danh quy trình (process ID) cho quy trình đó, được sử dụng để theo dõi nó trong quá trình chạy.<br>
+. B5: Quy trình chạy tự động, hệ điều hành theo dõi quá trình thực thi và đáp ứng các yêu cầu tài nguyên hệ thống<br>
+. B6: quy trình kết thúc, nó sẽ bị xóa khỏi bộ nhớ<br>
+
+II. 
