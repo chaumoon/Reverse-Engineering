@@ -187,4 +187,26 @@ II. 32-Bit x86 Processors<br>
 
 III. 64-Bit x86-64 Processors<br>
 
+- tính năng cơ bản:<br>
+. Nó tương thích ngược với tập lệnh x86.<br>
+. Địa chỉ có độ dài 64 bit, cho phép không gian địa chỉ ảo có kích thước là 264 byte. Trên các thiết kế chip hiện tại, chỉ có 48 bit thấp nhất được sử dụng<br>
+. Nó có thể sử dụng thanh ghi tổng quát 64 bit, cho phép các lệnh có toán hạng số nguyên 64 bit<br>
+. Nó sử dụng tám thanh ghi tổng quát nhiều hơn so với x86<br>
+. Nó sử dụng không gian địa chỉ vật lý 48 bit, hỗ trợ lên đến 256 terabyte RAM<br>
+- khi chạy trong chế độ 64-bit nguyên bản, các bộ vi xử lý này không hỗ trợ chế độ thực 16-bit hoặc chế độ ảo-8086<br>
 
+1. 64-Bit Operation Modes<br>
+- Kiến trúc Intel 64 giới thiệu một chế độ mới được gọi là IA-32e<br>
+- gồm hai chế độ con: chế độ tương thích và chế độ 64-bit
+
+*. Compatibility Mode <chế độ tg thích><br>
+- các ứng dụng hiện có 16-bit và 32-bit thường có thể chạy mà không cần biên dịch lại
+- Windows 16-bit (Win16) và DOS sẽ không chạy trên phiên bản 64-bit của Microsoft Windows
+- Windows 64-bit không có một tiến trình máy ảo DOS để tận dụng khả năng của bộ xử lý chuyển sang chế độ ảo-8086
+  
+*. 64-Bit Mode<br>
+- bộ xử lý chạy các ứng dụng sử dụng không gian địa chỉ tuyến tính 64-bit
+- Chế độ này cho phép sử dụng các toán tử hướng 64-bit
+  
+2. Basic 64-Bit Execution Environment <Môi trường thực thi cơ bản 64-bit><br>
+- 
