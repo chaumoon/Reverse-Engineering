@@ -49,3 +49,20 @@ bus địa chỉ: chứa địa chỉ of hg dẫn và dữ liệu khi chúng th�
 . Lệnh được phân tích bởi bộ giải mã lệnh, gây ra việc gửi các tín hiệu số phù hợp đến bộ điều khiển, điều phối các đơn vị ALU (Arithmetic Logic Unit - Đơn vị tính toán và logic) và đơn vị số dấu chấm động (floating-point unit).<br>
 . bus điều khiển chuyển tín hiệu sử dụng đồng hồ hệ thống để điều phối việc truyền dữ liệu giữa các thành phần khác nhau của CPU<br>
 
+3. Reading from Memory<br>
+- máy tính đọc bộ nhớ chậm hơn truy cập vào thanh ghi nội bộ
+- thông qua 4 bc:<br>
+. B1: Đặt địa chỉ của giá trị bạn muốn đọc lên bus địa chỉ<br>
+. B2: Kích hoạt (thay đổi giá trị của) chân RD (read) của bộ xử lý<br>
+. B3: Chờ một chu kỳ đồng hồ để các chip bộ nhớ phản hồi<br>
+. B4: Sao chép dữ liệu từ bus dữ liệu vào toán hạng đích<br>
+- 1 bc thg yêu cầu 1 chu kì clock, thanh ghi of CPU thg chỉ cần truy cập 1 chu kì clock duy nhất
+- giảm time đoạc và ghi vào bộ nhớ -> lưu trữ các lệnh và dữ liệu đã được sử dụng gần đây nhất trong bộ nhớ tốc độ cao được gọi là bộ nhớ cache
+- can tìm thấy dữ liệu trong cache -> cache hit, ko tìm thấy -> cache miss
+- bộ nhớ cache có 2 loại: 
+. bộ nhớ cache cấp 1 (cache chính): lưu trữ ngay trên CPU<br>
+. bộ nhớ cache cấp 2 (cache phụ): chậm hơn 1 chút và đc kết nối vs CPU = 1 bus dữ liệu tốc độ cao<br>
+-> chúng hoạt động cùng nhau theo 1 cách tối ưu<br>
+- cache nhanh vì nó xây dựng từ chip bộ nhớ (RAm tĩnh)
+
+4. 
