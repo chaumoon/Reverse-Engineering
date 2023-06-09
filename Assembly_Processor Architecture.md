@@ -167,4 +167,24 @@ II. 32-Bit x86 Processors<br>
   
   ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/2d8accda-dacb-4116-aec2-2f7fd87de42a)<br>
   
-3. 
+3. x86 Memory Management <quản lí bộ nhớ x86><br>
+*. real-address mode<br>
+- chỉ có thể truy cập được 1 MByte bộ nhớ, từ hexa 00000 đến FFFFF<br>
+- chỉ có thể chạy một chương trình tại một thời điểm, nhưng có thể tạm thời ngắt chương trình đó để xử lý các yêu cầu từ các thiết bị ngoại vi<br>
+- chương trình ứng dụng được phép truy cập vào bất kỳ vị trí bộ nhớ nào, bao gồm cả các địa chỉ được liên kết trực tiếp với phần cứng hệ thống<br>
+- Hệ điều hành MS-DOS chạy trong chế độ địa chỉ thực, và Windows 95 và 98 cũng có thể khởi động vào chế độ này<br>
+
+*. protected mode<br>
+- có thể chạy nhiều chương trình cùng một lúc<br>
+- Mỗi quá trình (chương trình đang chạy) được gán một tổng cộng 4 GByte bộ nhớ<br>
+- Mỗi chương trình có thể được gán một khu vực bộ nhớ riêng, và các chương trình bị ngăn không vô tình truy cập vào mã và dữ liệu của nhau<br>
+- MS-Windows và Linux chạy trong chế độ bảo vệ<br>
+
+*. virtual-8086 mode<br>
+- máy tính chạy trong chế độ bảo vệ và tạo ra một máy ảo-8086 với không gian địa chỉ riêng 1 MByte, giả lập một máy tính 80x86 chạy trong chế độ địa chỉ thực<br>
+- có thể chạy nhiều cửa sổ như vậy cùng một lúc, và mỗi cửa sổ được bảo vệ khỏi các tác động từ các cửa sổ khác<br>
+- Một số chương trình MS-DOS mà trực tiếp tham chiếu đến phần cứng máy tính sẽ không chạy trong chế độ này dưới Windows NT, 2000 và XP<br>
+
+III. 64-Bit x86-64 Processors<br>
+
+
