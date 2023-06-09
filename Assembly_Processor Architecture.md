@@ -74,4 +74,27 @@ bus địa chỉ: chứa địa chỉ of hg dẫn và dữ liệu khi chúng th�
 . B5: Quy trình chạy tự động, hệ điều hành theo dõi quá trình thực thi và đáp ứng các yêu cầu tài nguyên hệ thống<br>
 . B6: quy trình kết thúc, nó sẽ bị xóa khỏi bộ nhớ<br>
 
-II. 
+II. 32-Bit x86 Processors<br>
+
+1. Modes of Operation<br>
+- mô tả về các chế độ:<br>
+*. Protected Mode<br>
+- tất cả các chỉ thị và tính năng đều có sẵn
+- chương trình được cung cấp các khu vực bộ nhớ riêng được gọi là các đoạn (segments)
+- bộ xử lý ngăn chặn các chương trình truy cập vào bộ nhớ ngoài các đoạn được gán cho chúng<br>
+
+*. Virtual-8086 Mode<br>
+- để bộ xử lí can thục thi chg trình ở môi trg an toàn 
+- can thực thi nh phiên ảo-8086 riêng biệt cùng một lúc
+
+*. Real-Address Mode<br>
+- triển khai môi trường lập trình của một bộ xử lý Intel sớm với một số tính năng bổ sung
+- hữu ích nếu một chương trình yêu cầu truy cập trực tiếp vào bộ nhớ hệ thống và các thiết bị phần cứng
+
+*. System Management Mode - SMM<br>
+- cung cấp cho hệ điều hành một cơ chế để triển khai các chức năng: quản lý năng lượng và bảo mật hệ thống
+- đc triển khai bằng cách tùy chỉnh bộ xử lý cho một cấu hình hệ thống cụ thể
+
+2. Basic Execution Environment<br>
+- 
+
