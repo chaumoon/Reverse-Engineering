@@ -186,7 +186,6 @@ II. 32-Bit x86 Processors<br>
 - Một số chương trình MS-DOS mà trực tiếp tham chiếu đến phần cứng máy tính sẽ không chạy trong chế độ này dưới Windows NT, 2000 và XP<br>
 
 III. 64-Bit x86-64 Processors<br>
-
 - tính năng cơ bản:<br>
 . Nó tương thích ngược với tập lệnh x86.<br>
 . Địa chỉ có độ dài 64 bit, cho phép không gian địa chỉ ảo có kích thước là 264 byte. Trên các thiết kế chip hiện tại, chỉ có 48 bit thấp nhất được sử dụng<br>
@@ -209,4 +208,24 @@ III. 64-Bit x86-64 Processors<br>
 - Chế độ này cho phép sử dụng các toán tử hướng 64-bit
   
 2. Basic 64-Bit Execution Environment <Môi trường thực thi cơ bản 64-bit><br>
-- 
+- khác biệt quan trọng nhất so với các bộ xử lý 32-bit là:<br>
+. Mười sáu thanh ghi 64-bit dùng cho mục đích tổng quát (trong chế độ 32-bit chỉ có tám thanh ghi dùng cho mục đích tổng quát)<br>
+. Tám thanh ghi dùng cho dấu phẩy động 80-bit<br>
+. Một thanh ghi cờ trạng thái 64-bit có tên là RFLAGS (chỉ sử dụng 32 bit thấp hơn)<br>
+. Một con trỏ lệnh 64-bit có tên là RIP<br>
+. Tám thanh ghi MMX 64-bit<br>
+. Mười sáu thanh ghi XMM 128-bit (trong chế độ 32-bit, chỉ có tám thanh ghi như vậy)<br>
+
+*. General-Purpose Registers <thanh ghi use cho aim tổng quát><br>
+- kích thc toán hạng mặc định à 32 bit và có 8 thanh ghi đa năng
+- thêm tiền tố REX (mở rộng thanh ghi) vào mỗi chỉ thị, các toán hạng can dài 64 bit và 16 thanh ghi đa năng 
+- có all thanh ghi giống như ở chế độ 32 bit + 8 thanhh ghi đánh số từ R8 đến R15
+  
+ ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/ad65ad24-4523-42ab-9734-8448568d633e)<br>
+  
+- một số chi tiết cần lưu ý:<br>
+. 1 chỉ thị đơn ko thể truy cập cùng lúc 1 thanh ghi byte cao như AH, BH, CH, DH và đông thời truy cập byte thấp of 1 trong các thanh ghi byte ms (như DIL)<br>
+. thanh ghi EFLAGS 32 bit đc thay bởi thanh ghi RFLAGS 64 bit ở chế độ 64 bit, chúng share 32 bit thấp như nhau và 32 bit cao of RFLAGS ko đc xài<br>
+. Các cờ trạng thái là giống nhau ở cả chế độ 32 bit và 64 bit.<br>
+  
+
