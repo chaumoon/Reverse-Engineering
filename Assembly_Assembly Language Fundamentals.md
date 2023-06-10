@@ -152,6 +152,34 @@ Code label<br>
 
 ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/18ad3204-4837-4f9a-b02c-550f31ed88d9)<br>
 
+- instruction STC không có toán hạng: stc ; set Carry flag
+- Instruction INC có một toán hạng: inc eax ; cộng 1 vào EAX
+- Instruction MOV có hai toán hạng: mov count,ebx ; chuyển EBX vào count
+- khi các instruction có nh toán hạng -> cái đầu tiên là toán hạng đích (destination operand), casci thứ 2 là toán hạng nguồn (source operand)
+- Instruction IMUL có ba toán hạng, trong đó toán hạng đầu tiên là đích, và hai toán hạng tiếp theo là nguồn, được nhân với nhau: imul eax,ebx,5<br>
+
+*. Comments<br>
+- trên 1 dòng: bắt đầu = dấu (;)
+- trên nh dòng:
+
+      COMMENT + kí tự<br>
+          Dòng này là một bình luận.<br>
+          Dòng này cũng là một bình luận.<br>
+      !<br>
+      
+*. The NOP (No Operation) Instruction<br>
+- chiếm 1 byte trong bộ nhớ, ko thực hiện bất kì công việc nào
+- Đôi khi, hướng dẫn này được sử dụng bởi trình biên dịch và trình tổng hợp để căn chỉnh mã thành địa chỉ hiệu quả
+- VD: hướng dẫn MOV đầu tiên tạo ra ba byte mã máy. Hướng dẫn NOP căn chỉnh địa chỉ của hướng dẫn thứ ba thành một giới hạn doubleword (bội số chẵn của 4):<br>
+
+       00000000 66 8B C3 mov ax,bx<br>
+       00000003 90 nop ; align next instruction<br>
+       00000004 8B D1 mov edx,ecx<br>
+       
+- Các bộ xử lý x86 được thiết kế để tải mã và dữ liệu nhanh hơn từ các địa chỉ doubleword chẵn
+
+II. Example: Adding and Subtracting Integers<br>
+1. The AddTwo Program<br>
 - 
 
 
