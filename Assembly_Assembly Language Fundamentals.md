@@ -85,14 +85,73 @@ I. Basic Language Elements <các phần tử cơ bản of nn assembly><br>
 *. Defining Segments <định nghĩa đoạn><br>
 - directive: định nghĩa phân chg trình or đoạn 
 - .DATA:<br>
+
        .data<br>
+       
 - .CODE: xác định vùng chứa lệnh can thực thi:<br>
+
        .code<br>
+       
 - .STACK: vùng chg trình chứa runtime stack và thiết lập kích thc of nó:<br>
+
        .stack 100h<br>
+       
 - xem tại phụ lục A
 
 10. instructions<br>
+- instruction: 1 câu lệnh đc thực thi khi chg trofnh biên dịch, biên dịch thành byte nn máy, đc tải và thực thi bởi CPU trong time chạy
+- gồm 4 phần:<br>
+. Label (nhãn): tùy chọn<br>
+. Instruction mnemonic (mã gợi nhớ): bắt buộc<br>
+. Operand(s) (toán hạng): thg bắt buộc<br>
+. Comment: tùy chọn
+
+         [label:] mnemonic [operands] [;comment]<br>
+
+*. Label<br>
+- đánh dấu vị trí cho các instruction và dữ liệu
+- đặt ngay trc 1 instruction cho bt địa chỉ of instruction đó
+- đặt trc biến -> địa chỉ biến
+- có 2 loại: <br>
+
+data label: <br>
+. định danh vị trí of biến, cung cấp 1 cách thuận tiện để tham chiếu đến biến trong code<br>
+. định nghĩa 1 biến tên count: count DWORD 100<br>
+. trình biên dịch gán 1 địa chỉ số cho mỗi nhãn, can định nghĩa nh mục data sau 1 nhãn<br>
+. VD: array xác định vị trí của số đầu tiên (1024). Các số khác tiếp theo trong bộ nhớ ngay sau đó:<br>
+
+    array DWORD 1024, 2048<br>
+          DWORD 4096, 8192<br>
+    
+. nhãn kết thúc bởi dấu (:)<br>
+
+Code label<br>
+. use như aim of câu lệnh nhảy và lặp<br>
+. VD: câu lệnh JMP (nhảy) sau chuyển đến vị trí được đánh dấu bởi nhãn có tên là target, tạo thành một vòng lặp:<br>
+
+    target:<br>
+        mov ax,bx<r>
+        ...<br>
+        jmp target<br>
+        
+. nó can share cùng 1 dòng vs 1 câu lệnh or ở trên 1 dòng riêng biệt:<br>
+
+    L1: mov ax,bx<br>
+    L2:<br>
+    
+*. Instruction Mnemonic<br>
+- use để định danh 1 instrcution 
+- các mnemonic của instruction trong ngôn ngữ assembly như mov, add và sub cung cấp gợi ý về loại hoạt động mà chúng thực hiện
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/60a2ddd8-c85e-437d-b8c7-3484bca73aaa)<br>
+
+*. Operands<br>
+- là 1 giá trị đc use lm đầu vào or đầu ra cho 1 instruction 
+- các instruction can có < 3 toán hạng, mỗi toán hạng có thể là một thanh ghi (register), toán hạng bộ nhớ (memory operand), biểu thức số nguyên (integer expression) hoặc cổng vào-ra (input-output port)
+- một số toán hạng mẫu:<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/18ad3204-4837-4f9a-b02c-550f31ed88d9)<br>
+
 - 
 
 
