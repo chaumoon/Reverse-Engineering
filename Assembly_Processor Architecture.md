@@ -277,5 +277,42 @@ IV. Components of a Typical x86 Computer <thành phần of 1 máy tính x86><br>
   . VRAM: bộ nhớ vid, 2 cổng cho phép 1 cổng lm ms liên tục màn hình khi cổng khác ghi dữ liệu lên màn hình<br>
   . CMOS RAM: lưu trữ in4 cấu hình hệ thống, lm ms = pin -> nội dung đc lưu khi máy tắt nguồn<br>
   
-                                                                                                  
+ V. Input–Output System<br>
+  1. Levels of I/O Access <cấp độ truy cập vào I/O><br>
+  - chg trình ứng dụng thg đọc dữ liệu từ bàn phím và các tệp tin trên đĩa cứng, và ghi dữ liệu ra màn hình và tệp tin<br>
+  - truy cập I/O: qua phần cứng or gọi hàm do hệ điều hành cung cấp 
+  - truy cập I/O có 3 cấp độ chính:<br>
+  . High-level language functions: như C++, Java chứa hàm nhập xuất dữ liệu, hàm này di động vì can hoạt động trên nh hệ thống máy tính khác nhau và ko phụ thuộc vào hệ điều hành <br>
+  . Operating system: gọi hàm of hệ điều hành từ thu viện API (application programming interface), hệ điều hành cung cấp hoạt động cấp cao như ghi chuỗi vào tệp tin, đọa chuỗi từ bàn phím và phân bỏ khối bộ nhớ<br>
+  . BIOS: hệ thống cơ bản đầu vào - đầu ra là tập hợp các tiểu trình cấp thấp liên lạc trực tiếp vs các thiết bị phần cứng. hệ điều hành thông thg giao tiếp vs BIOS<br>
+  
+*. Device Drivers:<br>
+  - là các chg trình cho phép hệ điều hành giao tiếp trực tiếp vs các thiết bị phần cứng và hệ thống BIOS
+  - nó thực thi mã trong firmware of thiết bị để đọc dữ liệu theo cách đặc bt of thiết bị đó
+  - đc cài đặt theo 2 cách:<br>
+  . trc khi 1 thiết bị phần cứng cụ thể đc kết nối vs máy tính<br>
+  . sau khi thiết bị đã đc kết nối và xác định, hệ điều hành nhận ra tên + chữ kí of thiết bị -> tìm và cài đặt<br>
+  - các bc chg trình ứng dụng hiển thị 1 chuỗi kí tự trên màn hình:<br>
+  . 1 câu lệnh trong chg trình ứng dụng gọi 1 hàm thư viện ngôn ngữ cao cấp để ghi chuỗi vào đầu ra tiêu chuẩn<br>
+  . hàm thư viện (cấp độ 3) gọi 1 hàm of hệ điều hành, truyền con trỏ chuỗi<br>
+  . hàm of hệ điều hành (cấp độ 2) xài 1 vòng lặp để gọi 1 tiểu trình BIOS, truyền cho nó mã ASCII và màu sắc of mỗi kí tự. hệ điều hành gọi 1 tiểu trình BIOS khác để di chuyển con trỏ đến vị trí tiếp theo trên màn hình<br>
+  . tiểu trình BIOS (cấp độ 1) nhận 1 kí tự, ánh xạ vào 1 kiểu chữ hệ thống cụ thể và gửi nó đến 1 cổng phần cứng đc kết nối vs thẻ điều khiển video<br>
+  . thẻ điều khiển video (cấp độ 0) tạo ra tín hiệu phần cứng theo time cho hiển thị video<br>
+  
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/b32e29a2-5b2a-4d1e-bcac-63869b0513de)<br>
 
+*. Programming at Multiple Levels<br>
+  - các cấp độ truy xuất:<br>
+. cấp độ (lv) 3: gọi các hàm thư viện để nhập - xuất văn bản ch và nhập - xuất dựa trên tệp tin<br>
+  . lv 2: như lv 1, nếu hệ điều hành use giao diện user dùng đồ họa, nó có các hàm để hiển thị đồ họa theo cách độc lập vs thiết bị<br>
+  . lv 1: gọi các hàm BIOS để điều khiển tính năng cụ thể of thiết bị: màu sắc, đồ họa, âm thanh, nhập liệu từ bàn phím và nhập - xuất đĩa cứng cấp thấp<br>
+  . lv 0: gửi + nhận data từ cổng phần cứng, có sự kiểm soát tuyệt đối vs các thiết bị cụ thể -> nó ko di động. thiết bị khác nhau xài cổng phần cứng khác nhau -> mã chg trình tùy chỉnh cho từng loại thiết bị cụ thể<br>
+  - lv 2: di động, ko đặc bt nhanh vì mỗi lệnh I/O phải thông qua 1 lớp trc khi thực thi
+  
+  ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/7b46a70a-1a07-4953-9fd3-0d18deddf1c8)<br>
+  
+  - lv 1 (BIOS): hoạt động trên thiết bị có BIOS tiêu chuẩn, nma ko tạo ra cùng 1 kết quả. nó phải viết mã để phát hiện thiết lập phần cứng of user và điều chỉnh định dạng đầu ra. nó chạy nhanh hơn lv 2 và chỉ cách nhau 1 cấp
+  - lv 0: hoạt động vs các thiết bị thông thg: cổng nối tiếp, thiết bị I/O cụ thể. chg trình use lv này phải mở rộng logic lập trình of mk để xử lí biến thể trong thiết bị BIOS. chg trình ở lv này thực thi nhanh chóng như phần cứng cho phép
+  - Hệ điều hành đa năng hiếm khi cho phép các chương trình ứng dụng truy cập trực tiếp vào phần cứng hệ thống vì nó lm việc chạy đồng ths of nh chg trình khó khăn. -> phần cứng chỉ được truy cập thông qua các trình điều khiển thiết bị, theo một cách kiểm soát cẩn thận. 
+  - các hệ điều hành nhỏ hơn dành cho các thiết bị chuyên dụng thường kết nối trực tiếp với phần cứng -> giảm lượng bộ nhớ mà mã hệ điều hành chiếm dụng, và hầu hết thời gian chỉ chạy một chương trình duy nhất
+  - Hệ điều hành Microsoft cuối cùng cho phép các chương trình truy cập trực tiếp vào phần cứng là MS-DOS, và nó chỉ có thể chạy một chương trình một lúc
