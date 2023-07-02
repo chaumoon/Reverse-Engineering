@@ -180,7 +180,53 @@ Code label<br>
 
 II. Example: Adding and Subtracting Integers<br>
 1. The AddTwo Program<br>
+
+       1: ; AddTwo.asm - adds two 32-bit integers
+       2: ; Chapter 3 example
+       3:
+       4: .386
+       5: .model flat,stdcall
+       6: .stack 4096
+       7: ExitProcess PROTO, dwExitCode:DWORD
+       8:
+       9: .code
+       10: main PROC
+       11: mov eax,5 ; move 5 to the eax register
+       12: add eax,6 ; add 6 to the eax register
+       13:
+       14: INVOKE ExitProcess,0
+       15: main ENDP
+       16: END main<br>
+
+- dòng 4: ".386" -> xác định đây là chương trình 32bit can truy cập vào thanh ghi và địa chỉ 32bit
+- dòng 5 chọn mô hình bộ nhớ của chương trình (flat) và xác định quy ước gọi hàm (gla stdcall) cho các thủ tục
+- dòng 6: dành 4096 byte bộ nhớ xài cho ngăn xếp time chạy mà mọi chương trình đều phải có
+- dòng 7: khai báo 1 nguyên mẫu (prototype) cho hàm ExitProcess (là 1 dịch vụ chuẩn của windows. nguyên mẫu gồm: tên hàm, từ khóa PROTO, một dấu phẩy và danh sách các tham số đầu vào. Tham số đầu vào cho ExitProcess được đặt tên là dwExitCode, can coi đó là giá trị trả về đc truyền lại cho windows (0 là thành công, !=0 là lỗi). Khi chương trình của bạn đã sẵn sàng kết thúc, nó gọi ExitProcess và trả về một số nguyên để thông báo cho hệ điều hành rằng chương trình của bạn đã hoạt động tốt.
+- dòng 16: dùng chỉ thị END đánh dấu dòng cuối đc lắp ráp và xác định điểm nhập chg trình (main). main đc khai báo ở dòng 10 và nó đánh dấu địa chỉ mà chg trình sẽ bắt đầu thực thi<br>
+
+*. A Review of the Assembler Directives: (đánh giá lại các chỉ thị)<br>
+- .MODEL: cho bt trình dịch use mô hình bộ nhớ nào:<br>
+   ```.model flat, stdcall```<br>
+. chg trình 32 bit luôn xài chế độ flat, liên quan đến chế độ bảo vệ của bộ xử lý<br>
+. stdcall -> cách trinh =f biên dịch quản lý ngăn xếp trong time chạy khi gọi các thủ tục<br>
+- .STACK: cho bt số byte trình biên dịch nên dành cho ngăn xếp trong time chạy of chg trình:<br>
+   ```.stack 4096```<br>
+. all chg trình hiện đại đều xài 1 ngăn xếp khi gọi các tiểu trình: để lưu trữ các tham số truyền vào, lưu địa chỉ of mã đã gla hàm<br>
+. CPU xài địa chỉ này để quay lại khi cuộc gọi hàm kết thúc, trở lại vị trí mà hàm đã đc gọi<br>
+. ngăn xếp time chạy can chứa các biến cục bộ - biến đc khai báo bên trong 1 hàm<br>
+- .CODE: đánh dấu phần thân mã of chg trình, ns chứa các chỉ thị can thực thi, sau dòng này là khai báo điểm nhập chg trình (main - theo quy ước). điểm nhập: ns câu lệnh đầu tiên mà chg trình sẽ thực thi <br>
+   ```.code
+       main PROC```<br>
+- ENDP: đánh dấu kết thúc của một thủ tục, chg trình tên main -> phải xài tên main<br>
+   ```main ENDP```<br>
+- END: kết thúc chg trinh và trỏ ts điểm nhập chg trình<br>
+   ```END main```<br>
+. viết j sau dòng END cx đc vì nó sẽ đc bỏ qua<br>
+
+2. Running and Debugging the AddTwo Program<br>
 - 
+
+   
 
 
 
