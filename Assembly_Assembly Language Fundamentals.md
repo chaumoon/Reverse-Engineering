@@ -224,7 +224,122 @@ II. Example: Adding and Subtracting Integers<br>
 . viết j sau dòng END cx đc vì nó sẽ đc bỏ qua<br>
 
 2. Running and Debugging the AddTwo Program<br>
+*. Debugging Demonstration<br>
+
+ ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/13731d99-db92-4f85-8824-cebbced15209)<br>
+
+*. Customizing the Debugging Interface <tùy chỉnh giao diện gỡ lỗi><br>
+- khi chạy chg trình nó sẽ đc khởi chạy bên trong 1 cửa sổ control.
+- can mở 1 cửa sổ command pronpt trong thư mục Debug\Bin của dự án và chạy ứng dụng trực tiếp từ dòng lệnh
+- nếu lm ddieeefu này -> chỉ thấy k.quả of chg trình bao gồm văn bản đc viết ra cửa sổ control
+
+III. Assembling, Linking, and Running Programs<br>
+1. The Assemble-Link-Execute Cycle <chu trình Assemble-Link-Execute><br>
+- quá trình chỉnh sửa, lắp ráp, liên kết và thực thi các chg trình ngôn ngữ assembly<br>
+. B1: use trình soạn thảo văn bản tạo 1 tệp văn bản tên là source file<br>
+. B2: trình biên dịch đọc tệp nguồn và tạo ra tệp object file là phiên bản dịch sang nn máy of chg trình. nó cx tạo ra listing file. nếu có lỗi -> quay về B1 để sửa<br>
+. B3: trình liên kết đọc object file và check xem chg trình có chứa các lời gọi tới các thủ tục trong thư viện liên kết hay ko. trình liên kết sao chép các thủ tục cần thiết từ thư viện liên kết + object file -> executable file<br>
+. B4: tiện ích nạp hệ điều hành đọc executable file và bộ nhớ và nhảy đến địa chỉ bắt đầu of chg trình trên CPU và chg trình bắt đầu thực thi<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/8e73b188-27d8-4bdb-a8ab-26b83a364731)<br>
+
+2. Listing File<br>
+- 1 listing file chứa 1 bản sao của mã nguồn chg trình, vs số dòng, địa chỉ số of mỗi lệnh, các byte mã máy of mỗi lệnh (dưới dạng hệ thập lục phân) và 1 symbol table
+- symbol table: chứa tên all định danh (identifiers), các đoạn (segments) và thông tin liên quan
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/d7add1ab-e356-4be9-b3ff-2c6e4a434186)<br>
+
+- dòng 1-7 ko chứa mã thực thi -> sao chép trực tiếp từ tệp nguồn mà ko có j thay đổi
+- dòng 9: cho thấy đoạn mã (code segment) bắt đầu tại địa chỉ 00000000 (trong một chương trình 32-bit, địa chỉ hiển thị dưới dạng 8 chữ số thập lục phân). địa chỉ này liên quan đến đầu of vùng bộ nhớ chg trình nhưng sẽ đc chuyển đổi thành bộ nhớ địa chỉ tuyệt đối khi chg trình đc nạp vào bộ nhớ. Khi điều đó xảy ra, chương trình có thể bắt đầu tại một địa chỉ như 00040000h.
+- dòng 10, 11: hiển thị địa chỉ bắt đầu là 00000000 vì lệnh thực thi đầu tiên là MOV (dòng 11)
+- dòng 11: có 1 số byte thập lục phân xuất hiện giữa địa chỉ và mã nguồn. Các byte này (B8 00000005) đại diện cho lệnh mã máy (B8) và giá trị hằng số 32-bit (00000005) được gán vào thanh ghi EAX bởi lệnh:<br>
+   ```11: 00000000 B8 00000005 mov eax,5```<br>
+- giá trị B8 (mã hoạt động or opcode): đại diện cho 1 lệnh máy cụ thể di chuyển 1 số nguyên 32bit vào thanh ghi eax
+- dòng 12: chứa 1 lệnh thực thi, bắt đầu từ 00000005. vị trí này là 1 khoảng cách 5 byte từ đầu chg trình
+- dòng 14: chứa chỉ thị invoke, nó khiến trình biên dịch tạo ra các câu lệnh PUSH, CALL hiện trên dòng 15, 16
+- các lệnh máy đc tải vào bộ nhớ dưới dạng 1 chuỗi các giá trị số nguyên, ở đây là hệ 16: B8, 00000005, 83, C006, 6A, 00, EB, 00000000. số cữ số -> số bit (1 số -> 8 bit) -> các lệnh máy có đúng 15 byte
+- Phần còn lại của tệp danh sách chứa danh sách các cấu trúc và liên minh, cũng như các thủ tục, tham số và biến cục bộ<br>
+  
+IV. Defining Data <định nghĩa dữ liệu><br>
+1. Intrinsic Data Types <các loại data cố định><br>
+2. Data Definition Statement <br>
+- 1 Data Definition Statement dành ra bộ nhớ cho 1 biến, vs tên tùy chọn
+- cú pháp:<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/86418a6b-a490-4dc9-ab4c-6e166238fdf5)<br>
+
+- vd:<br>
+   ```count DWORD 12345```<br>
+- name: tên tùy chọn gán cho biến phải tuân theo các quy tắc cho các định danh
+- Directive: can là bất kì cái nào trong bảng 3-2 và 3-3
+- Initializer: ít nhất 1 giá trị khởi tạo đc yêu cầu trong 1 câu lệnh định nghĩa dữ liệu, ngảy cả khi nó là số 0. các giá trị khởi tạo bổ sung đc phân tách bằng dấu ','. nếu muốn để lại biến ko đc khởi tạo *gán 1 giá trị ngẫu nhiên) -> xài kí hiệu '?'
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/2f3475e3-19ca-4c20-b8a3-0819bfb1286a)<br>
+
+3. Adding a Variable to the AddTwo Program<br>
+```
+      1: ; AddTwoSum.asm - Ví dụ chương 3
+      2:
+      3: .386
+      4: .model flat,stdcall
+      5: .stack 4096
+      6: ExitProcess PROTO, dwExitCode:DWORD
+      7:
+      8: .data
+      9: sum DWORD 0
+      10:
+      11: .code
+      12: main PROC
+      13: mov eax,5
+      14: add eax,6
+      15: mov sum,eax
+      16:
+      17: INVOKE ExitProcess,0
+      18: main ENDP
+      19: END main
+```
+
+- can chạy nó trong trình gỡ lỗi = cách đặt 1 điểm dừng (breakpoint) tại dòng 13 và thực hiện từng dòng 1.
+- thực hiện xong dòng 15 -> biến sum xem giá trị of nó or mở 1 của sổ Watch (theo dõi)
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/7ef9ad5d-c9f2-440d-8616-6771c2ed57c1)<br>
+
+4. Defining BYTE and SBYTE Data<br>
+- BYTE (define byte) và SBYTE (define signed byte): dành chỗ lưu trữ cho 1 or nh giá trị ko dấu or có dấu. mỗi giá trị khởi tạo phải fit vs 8 bit of ko gian lưu trữ<br>
+  
+      value1 BYTE 'A'      ; character literal
+      value2 BYTE 0        ; smallest unsigned byte
+      value3 BYTE 255      ; largest unsigned byte
+      value4 SBYTE −128    ; smallest signed byte
+      value5 SBYTE +127    ; largest signed byte<br>
+
+- 1 giá trị khởi tạo dang dấu '?' khiến biến ko đc khởi tạo <=> nó sẽ đc gán 1 giá trị tại thời điểm chạy:<br>
+   ```value6 BYTE ?```<br>
+- tên tùy chọn là 1 nhãn đánh dấu vị trí of biến tính từ đầu of đoạn bao bọc nó. VD: nếu value1 nằm ở vị trí offset 0000 trong đoạn dữ liệu và chiếm 1 byte không gian lưu trữ, value2 sẽ tự động nằm ở vị trí offset 0001<br>
+   ```value1 BYTE 10h
+      value2 BYTE 20h
+   ```<br>
+- Chỉ thị DB cũng có thể định nghĩa một biến 8 bit, có dấu hoặc không dấu:<br>
+   ```
+   val1 DB 255 ; byte không dấu
+   val2 DB -128 ; byte có dấu
+   ```<br>
+
+*. Multiple Initializers <nh giá trị khởi tạo><br>
+- nếu có nh giá trị khởi tạo trong cùng 1 định nghĩa dữ liệu, nhãn of nó chỉ tham chiếu đến offset of giá trị khởi tạo đầu tiên<br>
+   ```list BYTE 10,20,30,40```<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/3f71367c-9317-4bfc-a955-e6802128aa2a)<br>
+
+- kp all định nghĩa dữ liệu đều yêu cầu nhãn. VD: tiếp tục mảng byte bắt đầu = list<br>
+   ```list BYTE 10,20,30,40
+           BYTE 50,60,70,80
+           BYTE 81,82,83,84```<br>
 - 
+
+
+
+
 
    
 
