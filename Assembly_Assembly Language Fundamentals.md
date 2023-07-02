@@ -332,10 +332,47 @@ IV. Defining Data <định nghĩa dữ liệu><br>
 ![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/3f71367c-9317-4bfc-a955-e6802128aa2a)<br>
 
 - kp all định nghĩa dữ liệu đều yêu cầu nhãn. VD: tiếp tục mảng byte bắt đầu = list<br>
-   ```list BYTE 10,20,30,40
+   ```
+   list BYTE 10,20,30,40
            BYTE 50,60,70,80
-           BYTE 81,82,83,84```<br>
-- 
+           BYTE 81,82,83,84
+   ```
+- trong 1 định nghĩa dữ liệu duy nhất, các giá trị khởi tạo can use hệ số khác nhau, kí tự và chuỗi can kết hợp tự do. trong vd sau list1 và list2 có cùng nội dung<br>
+```
+   list1 BYTE 10, 32, 41h, 00100010b
+   list2 BYTE 0Ah, 20h, 'A', 22h
+```
+*. Defining Strings<br>
+- để định nghĩa chuỗi kí tự -> đặt trong '' or "", chuỗi kết thúc = NULL<br>
+```
+      greeting1 BYTE "Good afternoon",0
+      greeting2 BYTE 'Good night',0
+```
+- mỗi kí tự xài 1 byte lưu trữ, các byte ko cần phân tách bằng dấu phẩy. 1 chuỗi can phân thành nh dòng mà ko cần cung cấp nhãn cho mỗi dòng<br>
+```
+      greeting1 BYTE "Welcome to the Encryption Demo program "
+       BYTE "created by Kip Irvine.",0dh,0ah
+       BYTE "If you wish to modify this program, please "
+       BYTE "send me a copy.",0dh,0ah,0
+```
+- các mã hex ODh và OAh lần lượt dgla CR/LF (carriage-return line-feed) or kí tự kêt thúc dòng. khi đc viết ra đầu ra tiêu chuẩn -> chúng di chuyển con trỏ đến cột đầu of dòng tiếp theo sau dòng hiện tại
+- kí tự kết thúc dòng () nối hai dòng mã nguồn thành một câu lệnh duy nhất, nó phải là kí tự cuối cùng trên dòng<br>
+```
+      greeting1 BYTE "Welcome to the Encryption Demo program "
+      and
+      greeting1 \
+      BYTE "Welcome to the Encryption Demo program "
+```
+*. DUP Operator
+- cung cấp bộ nhớ cho nh mụ dữ liệu, use biểu thức số ng lm bộ đếm
+- hữu ích khi cấp phát ko gian cho 1 chuỗi or mảng và can đc use vs dữ liệu đc khởi tạo or chưa khởi tạo<br>
+```
+      BYTE 20 DUP(0)         ; 20 bytes, all equal to zero
+      BYTE 20 DUP(?)         ; 20 bytes, uninitialized
+      BYTE 4 DUP("STACK")    ; 20 bytes: "STACKSTACKSTACKSTACK"
+```
+
+
 
 
 
