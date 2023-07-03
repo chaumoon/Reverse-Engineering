@@ -364,13 +364,163 @@ IV. Defining Data <định nghĩa dữ liệu><br>
       BYTE "Welcome to the Encryption Demo program "
 ```
 *. DUP Operator
-- cung cấp bộ nhớ cho nh mụ dữ liệu, use biểu thức số ng lm bộ đếm
+- cung cấp bộ nhớ cho nh mục dữ liệu, use biểu thức số ng lm bộ đếm
 - hữu ích khi cấp phát ko gian cho 1 chuỗi or mảng và can đc use vs dữ liệu đc khởi tạo or chưa khởi tạo<br>
 ```
       BYTE 20 DUP(0)         ; 20 bytes, all equal to zero
       BYTE 20 DUP(?)         ; 20 bytes, uninitialized
       BYTE 4 DUP("STACK")    ; 20 bytes: "STACKSTACKSTACKSTACK"
 ```
+5. Defining WORD and SWORD Data<br>
+- chỉ thị WORD (define word) và SWORD (define signed word): tạo ra bộ nhớ để lưu trữ 1 or nh số ng 16bit<br>
+```
+      word1 WORD 65535           ; largest unsigned value
+      word2 SWORD -32768         ; smallest signed value
+      word3 WORD ?               ; uninitialized, unsigned
+```
+- chỉ thị cũ DW cx can đc use:<br>
+```
+      val1 DW 65535      ; unsigned
+      val2 DW -32768     ; signed
+```
+- Array of 16-Bit Words: tạo 1 mảng từ = cách liệt kê các p.tử or use toán tử DUP. mảng sau đây chứa 1 list các giá trị:<br>
+```
+      myList WORD 1,2,3,4,5
+```
+- biểu đồ of mảng trong bộ nhớ (giả sử bắt đầu từ địa chỉ 0000, tăng 2 do 1 giá trị chiếm 2 byte<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/5abb1968-5759-4a9c-a5d4-d6b17653a442)<br>
+
+- DUP: cung cấp 1 cách thuận tiện để khai báo 1 mảng:<br>
+```
+      array WORD 5 DUP(?)     ; 5 values, uninitialized
+```
+6. Defining DWORD and SDWORD Data<br>
+- chỉ thị DWORD (định nghĩa doubleword) và SDWORD directive (define có dấu doubleword): cấp phát bộ nhwos cho 1 or nh số nguyên 32 bit:<br>
+```
+      val1 DWORD 12345678h         ; unsigned
+      val2 SDWORD −2147483648      ; signed
+      val3 DWORD 20 DUP(?)         ; unsigned array
+```
+- chỉ thị cũ DD cx can đc xài để định nghĩa dữ liệu doubleword:<br>
+```
+      val1 DD 12345678h      ; unsigned
+      val2 DD −2147483648    ; signed
+```
+- DWORD: xài để khai báo 1 biến chứa giá trị độ lệch 32 bit of 1 biến khác. VD: pVal chứa độ lệch của val3:<br>
+```
+      pVal DWORD val3
+```
+- Array of 32-Bt Doublewords: tạo mảng bằng cách khởi tạo từng giá trị 1 cách rõ ràng:<br>
+```
+      myList DWORD 1,2,3,4,5
+```
+- mô tả biểu đồ of mảng này trong bộ nhớ, giả sử myList bắt đầu từ địa chỉ 0000. các độ lệch tăng lên 4<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/9978e06a-08a9-48cd-ad1f-338f2a671d01)<br>
+
+7. Defining QWORD Data<br>
+- Chỉ thị "QWORD" (định nghĩa quadword): cấp phát bộ nhớ cho các gia trị 64 bit (8 byte):<br>
+```
+      quad1 QWORD 1234567812345678h
+```
+- chỉ thị cũ DQ cx can xài để định nghĩa dữ liệu quadword:<br>
+```
+      quad1 DQ 1234567812345678h
+```
+
+8. Defining Packed BCD (TBYTE) Data <br>
+- intel lưu trữ các số ng dạng packed binary coded decimal (BCD) trong 1 gói 10 byte. mỗi byte (trừ byte cao nhất) chứa 2 chữ số thập phân
+- trong 9 byte thấp hơn, mỗi nửa byte chứa 1 chữ số thập phân duy nhất
+- trong byte cao nhất -> dấu of số (80h: âm, 00h: dương)
+- phạm vi số ng tử: -999,999,999,999,999,999 to +999,999,999,999,999,999.
+- vd: các byte lưu trữ dưới dạng hệ 16 cho số nguyên dương và âm 1234<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/a9ff9e1f-b0e9-4e0d-8bec-757f7ee7b438)<br>
+
+- MASM: use chỉ thị TBYTE để khai báo biến packed BCD, hằng só khởi tạo phải ở hệ 16 vì trình biên dịch ko tự động chuyển hệ 10 sang BCD<br>
+```
+      intVal TBYTE 800000000000001234h ; valid
+      intVal TBYTE -1234 ; invalid
+```
+- muốn mã hóa 1 số thực dưới dạng BCD đx đc đóng gói, can tải nó lên ngăn xếp thanh ghi số thực động = lệnh FLD, sau xài FBSTP để chuyển thành BCD đc đóng gói. nó lm tròn lên số ng gần nhất<br>
+```
+      .data
+      posVal REAL8 1.5
+      bcdVal TBYTE ?
+      .code
+      fld posVal       ; load onto floating-point stack
+      fbstp bcdVal     ; rounds up to 2 as packed BCD
+```
+- nếu posVal = 1.5 -> giá trị BCD = 2
+
+9. Defining Floating-Point Types<br>
+- REAL4: định nghĩa 1 biến số thực đơn độ chính xác 4 byte
+- REAl8: định nghĩa một giá trị đôi độ chính xác 8 byte
+- REAL10: định nghĩa một giá trị mở rộng chính xác 10 byte
+- mỗi loại yêu cầu 1 or nh hằng số khởi tạo số thực:<br>
+```
+      rVal1      REAL4 -1.2
+      rVal2      REAL8 3.2E-260
+      rVal3      REAL10 4.6E+4096
+      ShortArray REAL4 20 DUP(0.0)
+```
+- bảng sau: mô tả từng loại số thực<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/ea5e28f1-11c7-4c9d-8d20-b65ccb5c0ac8)<br>
+
+- các chỉ thị DD, DQ, DT cx can định nghĩa số thực:<br>
+```
+      rVal1 DD -1.2        ; short real
+      rVal2 DQ 3.2E-260    ; long real
+      rVal3 DT 4.6E+4096   ; extended-precision real
+```
+
+10. A Program That Adds Variables<br>
+- chg trình + nội dung 3 biến số nguyên và lưu tổng vào 1 biến thứ 4<br>
+```
+       1: ; AddVariables.asm - Chapter 3 example
+       2:
+       3: .386
+       4: .model flat,stdcall
+       5: .stack 4096
+       6: ExitProcess PROTO, dwExitCode:DWORD
+       7:
+       8: .data
+       9: firstval DWORD 20002000h
+      10: secondval DWORD 11111111h
+      11: thirdval DWORD 22222222h
+      12: sum DWORD 0
+      13:
+      14: .code
+      15: main PROC
+      16: mov eax,firstval
+      17: add eax,secondval
+      18: add eax,thirdval
+      19: mov sum,eax
+      20:
+      21: INVOKE ExitProcess,0
+      22: main ENDP
+      23: END main
+```
+- chỉ thi x86 ko cho phép cộng trực tiếp 1 biến vào 1 biến khác nhưng cho phép biến + vào 1 thanh ghi -> dòng 16-17 xài EAX lm bộ tích lũy<br>
+```
+      16: mov eax,firstval
+      17: add eax,secondval
+```
+- Sau dòng 17, EAX chứa tổng của firstval và secondval. Tiếp theo, dòng 18 thêm thirdval vào tổng trong EAX:<br>
+```
+      18: add eax,thirdval
+```
+- tại dòng 19 -> tổng đc sao chép vào biến sum:<br>
+```
+      19: mov sum,eax
+```
+- 
+
+
+
+
 
 
 
