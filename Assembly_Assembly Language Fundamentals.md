@@ -516,7 +516,108 @@ IV. Defining Data <định nghĩa dữ liệu><br>
 ```
       19: mov sum,eax
 ```
+
+11. Little-Endian Order <thứ tự Little-Endian><br>
+- các bộ xử lý x86 lưu trữ và truy xuất dữ liệu từ bộ nhớ = cách xài thứ tự little-endian (từ thấp đến cao)
+- byte min lưu trữ tại địa chỉ bộ nhớ đầu tiên đc cấp phát cho dữ liệu
+- byte còn lại lưu tại vị trí bộ nhớ kế tiếp
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/77bb9c18-6204-4d7a-8307-9096b5897a91)<br>
+
+- 1 số hẹ thống máy tính xài thứ tự cao -> thấp:<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/f8c9492d-8aca-4551-a3f7-592545514c83)<br>
+
+12. Declaring Uninitialized Data <khai báo dữ liệu chưa đc khởi tạo><br>
+- .DATA?: khai báo dữ liệu chưa đc khởi tạo. khi định nghĩa 1 khối lớn dữ liệu chauw đc khởi tạo .DATA? giảm kích thc of chg trình đã biên dịch. vd:<br>
+```
+      .data
+      smallArray DWORD 10 DUP(0)    ; 40 bytes
+      .data?
+      bigArray DWORD 5000 DUP(?)    ; 20,000 bytes, not initialized
+```
+- mã sau đây tạo ra 1 chg trình biên dịch > 20000byte:<br>
+```
+      .data
+      smallArray DWORD 10 DUP(0) ; 40 bytes
+      bigArray DWORD 5000 DUP(?) ; 20,000 bytes
+```
+- Mixing Code and Data: chuyển đổi giữa mã và dữ liệu trong chg trình of bạn. vd sau chèn 1 biến có tên temp giữa 2 câu lệnh mã:<br>
+```
+      .code
+      mov eax,ebx
+      .data
+      temp DWORD ?
+      .code
+      mov temp,eax
+      . . .
+```
+- việc trộn này can lm chg trình trở nên khó đọc
+
+V:  Symbolic Constants <br>
+- symbolic constant (or symbol definition): tạo ra bằng cách liên kết 1 định danh (biểu tg) vs 1 biểu thức số nguyên or 1 số văn bản. các biểu tg ko chiếm bộ nhớ, chúng chỉ đc use bởi bộ dịch khi quét 1 chg trình và ko thể thay đổi trong time chạy<br>
+
+![image](https://github.com/chaumoon/Reverse-Engineering/assets/127403046/51d9be06-8704-4cc9-9482-754d7abb238a)<br>
+
+- xài hg dẫn EQU và TEXTEQU để tạo các biểu tượng đại diện cho văn bản tùy ý
+
+1. Equal-Sign Directive <hg dẫn dấu =><br>
+- xài để liên kết tên biểu tg vs 1 biểu thức số nguyên, cú pháp:<br>
+```
+      name = expression
+```
+- thg thì nó là số nguyên 32bit, khi dịch all lần xuất hiện của name đc thay bằng expression trong quá trình tiền xử lý of trình biên dịch
+- Giả sử câu lệnh sau xuất hiện gần đầu một file mã nguồn:<br>
+```
+      COUNT = 500
+```
+- giả sử câu lệnh sau cần được tìm thấy trong file 10 dòng sau đó:<br>
+```
+      mov eax, COUNT
+```
+- Khi file được dịch, MASM sẽ quét file nguồn và tạo các dòng mã tương ứng:<br>
+```
+    mov eax, 500
+```
+*. Why Use Symbols?<br>
+- can bỏ qua OCUNT và chỉ viết MOV vs giá trị 500 nma khó đọc hơn
+- định giá trị cho COUNT:<br>
+```
+      COUNT = 600
+```
+- nếu tệp nguồn đc dịch lại -> giá trị COUNT sẽ thay bằng 600
+
+*. Current Location Counter <bộ đếm vị trí hiện tại><br>
+- biểu tượng quan trọng ($) là bộ đếm vị trí hiện tại
+- vd: khai báo một biến có tên là selfPtr và khởi tạo nó với giá trị vị trí của biến:<br>
+```
+      selfPtr DWORD $
+```
+*. Keyboard Definitions<br>
+- định nghĩa biểu tg -> dễ xài hơn<br>
+```
+      Esc_key = 27
+      -> mov al,Esc_key ; good style
+         mov al,27 ; poor style
+```
+*. Using the DUP Operator<br>
+- giả sử đã định nghĩa COUNT -> can xài trong định nghĩa dữ liệu<br>
+```
+      array dword COUNT DUP(0)
+```
+- 1 biểu tg đc định nghĩa vs = can đc định nghĩa lại trong cùng 1 chg trình. vd: cách bọ dịch đánh giá COUNT khi giá trị thay đổi<br>
+```
+      COUNT = 5
+      mov al,COUNT ; AL = 5
+      COUNT = 10
+      mov al,COUNT ; AL = 10
+      COUNT = 100
+      mov al,COUNT ; AL = 100
+```
 - 
+
+
+
 
 
 
